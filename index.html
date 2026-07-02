@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>ໂປຣແກຣມຕິດຕາມສິນຄ້າ ສະຄັບ & ສະບູ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/phetsarath@5.0.3/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/phetsarath@5.0.3/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;700&display=swap">
+<style>
+  :root{
+    --pink:#e8889a; --pink-dark:#c96a7c; --cream:#fff8f3; --green:#3fa66c;
+    --red:#d9534f; --gray:#8a8a8a; --card:#ffffff; --bg:#fdf2ec;
+  }
+  *{box-sizing:border-box;}
+  html,body{ -webkit-text-size-adjust:100%; }
+  body{
+    font-family:"Phetsarath","Phetsarath OT","Noto Sans Lao",sans-serif;
+    background:var(--bg); margin:0; color:#3a2b2e;
+  }
+  .hidden{display:none !important;}
+  /* LOGIN */
+  #loginScreen{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--pink),#f4b8c3); padding:16px;
+  }
+  .loginBox{
+    background:var(--card); padding:32px 28px; border-radius:18px;
+    width:340px; max-width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.15); text-align:center;
+  }
+  .loginBox h1{font-size:20px; color:var(--pink-dark); margin-bottom:4px;}
+  .loginBox p{font-size:13px; color:var(--gray); margin-top:0;}
+  .loginBox input{
+    width:100%; padding:10px 12px; margin:8px 0; border-radius:10px;
+    border:1px solid #eccfd6; font-size:16px; background:#fff7f9;
+  }
+  .loginBox button{
+    width:100%; padding:11px; margin-top:10px; border:none; border-radius:10px;
+    background:var(--pink-dark); color:#fff; font-size:15px; cursor:pointer;
+  }
+  .loginBox button.secondary{background:#fff; color:var(--pink-dark); border:1px solid var(--pink-dark);}
+  .loginMsg{font-size:13px; min-height:18px; margin-top:6px;}
+  .loginMsg.err{color:var(--red);}
+  .loginMsg.ok{color:var(--green);}
+
+  /* APP */
+  #app{max-width:1000px; margin:0 auto; padding:12px;}
+  header{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
+    background:var(--pink-dark); color:#fff; padding:14px 18px; border-radius:14px; margin-bottom:14px;
+  }
+  header h1{font-size:17px; margin:0;}
+  header .userInfo{font-size:13px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  header button{
+    background:#fff; color:var(--pink-dark); border:none; padding:6px 12px;
+    border-radius:8px; cursor:pointer; font-size:13px;
+  }
+  nav{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+  nav button{
+    flex:1; min-width:100px; padding:10px; border:none; border-radius:10px;
+    background:#fff; color:var(--pink-dark); cursor:pointer; font-size:13px;
+    border:1px solid #f1c6cf;
+  }
+  nav button.active{background:var(--pink-dark); color:#fff;}
+  .card{
+    background:var(--card); border-radius:14px; padding:16px; margin-bottom:14px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .card h2{font-size:16px; color:var(--pink-dark); margin-top:0;}
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+  .row > div{flex:1; min-width:140px;}
+  label{font-size:13px; color:#6a4a52; display:block; margin-bottom:4px;}
+  input,select{
+    width:100%; padding:10px 10px; border-radius:8px; border:1px solid #eccfd6;
+    font-size:16px; background:#fff7f9; font-family:inherit;
+  }
+  .btn{
+    padding:11px 18px; border:none; border-radius:8px; background:var(--pink-dark);
+    color:#fff; cursor:pointer; font-size:14px; margin-top:10px;
+  }
+  .btn.green{background:var(--green);}
+  .btn.red{background:var(--red);}
+  .btn.gray{background:#7a6066;}
+  .tableWrap{width:100%; overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; min-width:560px;}
+  th,td{padding:8px 6px; text-align:left; border-bottom:1px solid #f3dde2; white-space:nowrap;}
+  th{color:var(--pink-dark); font-size:12px;}
+  td.income{color:var(--green); font-weight:bold;}
+  td.expense{color:var(--red); font-weight:bold;}
+  .delBtn{background:none; border:none; color:var(--red); cursor:pointer; font-size:13px;}
+  .summaryGrid{display:flex; gap:12px; flex-wrap:wrap;}
+  .sumBox{
+    flex:1; min-width:140px; background:#fff7f9; border-radius:10px; padding:12px;
+    text-align:center; border:1px solid #f3dde2;
+  }
+  .sumBox .label{font-size:12px; color:var(--gray);}
+  .sumBox .value{font-size:18px; font-weight:bold; margin-top:4px;}
+  .tabs2{display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+  .tabs2 button{
+    padding:7px 14px; border-radius:8px; border:1px solid #f1c6cf; background:#fff;
+    color:var(--pink-dark); cursor:pointer; font-size:13px;
+  }
+  .tabs2 button.active{background:var(--pink-dark); color:#fff;}
+  .lowStock{color:var(--red); font-weight:bold;}
+  .loading{text-align:center; padding:40px; color:var(--gray);}
+  .catTag{display:inline-block; padding:2px 8px; border-radius:6px; background:#f3dde2; color:var(--pink-dark); font-size:11px;}
+
+  @media (max-width:480px){
+    header h1{font-size:15px;}
+    .loginBox{padding:24px 18px;}
+    nav button{min-width:90px; font-size:12px; padding:8px 6px;}
+  }
+
+  /* ---------- A4 PRINT REPORT ---------- */
+  #printArea{display:none;}
+  .reportPage{
+    background:#fff; width:210mm; min-height:297mm; margin:0 auto; padding:18mm 16mm;
+    color:#222; font-family:"Phetsarath","Phetsarath OT","Noto Sans Lao",sans-serif;
+  }
+  .reportHead{text-align:center; border-bottom:2px solid var(--pink-dark); padding-bottom:10px; margin-bottom:16px;}
+  .reportHead h1{font-size:22px; color:var(--pink-dark); margin:0 0 4px;}
+  .reportHead p{margin:2px 0; font-size:13px; color:#555;}
+  .reportMeta{display:flex; justify-content:space-between; font-size:13px; margin-bottom:12px;}
+  .reportTable{width:100%; border-collapse:collapse; font-size:12px;}
+  .reportTable th, .reportTable td{border:1px solid #ccc; padding:6px 8px; text-align:left;}
+  .reportTable th{background:#f3dde2; color:var(--pink-dark);}
+  .reportSumGrid{display:flex; gap:10px; margin-top:18px;}
+  .reportSumGrid .box{flex:1; border:1px solid #ccc; border-radius:6px; padding:10px; text-align:center;}
+  .reportSumGrid .box .l{font-size:11px; color:#666;}
+  .reportSumGrid .box .v{font-size:16px; font-weight:bold; margin-top:4px;}
+  .reportCatTitle{font-size:14px; color:var(--pink-dark); margin:18px 0 6px; font-weight:bold;}
+  .reportFooter{margin-top:30px; font-size:11px; color:#777; text-align:right;}
+
+  @media print{
+    body *{visibility:hidden;}
+    #printArea, #printArea *{visibility:visible;}
+    #printArea{display:block; position:absolute; left:0; top:0; width:100%;}
+    .reportPage{width:auto; min-height:auto; margin:0; padding:10mm 14mm; box-shadow:none;}
+    @page{ size:A4; margin:10mm; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="loginBox">
+    <h1>🧼 ສະຄັບ & ສະບູ</h1>
+    <p>ໂປຣແກຣມຕິດຕາມສິນຄ້າ ແລະ ບັນຊີ</p>
+    <div id="loginForm">
+      <input type="text" id="loginUser" placeholder="ຊື່ຜູ້ໃຊ້ (Username)" autocomplete="username">
+      <input type="password" id="loginPass" placeholder="ລະຫັດຜ່ານ (Password)" autocomplete="current-password">
+      <button onclick="doLogin()">ເຂົ້າສູ່ລະບົບ</button>
+      <button class="secondary" onclick="showRegister()">ສະໝັກສະມາຊິກໃໝ່</button>
+      <div class="loginMsg" id="loginMsg"></div>
+    </div>
+    <div id="registerForm" class="hidden">
+      <input type="text" id="regUser" placeholder="ຕັ້ງຊື່ຜູ້ໃຊ້">
+      <input type="password" id="regPass" placeholder="ຕັ້ງລະຫັດຜ່ານ">
+      <input type="password" id="regPass2" placeholder="ຢືນຢັນລະຫັດຜ່ານ">
+      <button onclick="doRegister()">ສ້າງບັນຊີ</button>
+      <button class="secondary" onclick="showLogin()">ກັບຄືນ</button>
+      <div class="loginMsg" id="regMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+  <header>
+    <h1>🧼 ຕິດຕາມສິນຄ້າ ສະຄັບ & ສະບູ</h1>
+    <div class="userInfo">
+      <span id="currentUserLabel"></span>
+      <button onclick="doLogout()">ອອກຈາກລະບົບ</button>
+    </div>
+  </header>
+
+  <nav>
+    <button id="navTx" class="active" onclick="switchTab('tx')">ບັນທຶກລາຍຮັບ-ລາຍຈ່າຍ</button>
+    <button id="navSum" onclick="switchTab('sum')">ສະຫຼຸບ</button>
+    <button id="navInv" onclick="switchTab('inv')">ສາງສິນຄ້າ</button>
+    <button id="navReport" onclick="switchTab('report')">ລາຍງານ (A4)</button>
+  </nav>
+
+  <!-- TRANSACTIONS -->
+  <div id="tabTx">
+    <div class="card">
+      <h2>➕ ບັນທຶກລາຍການໃໝ່</h2>
+      <div class="row">
+        <div>
+          <label>ປະເພດ</label>
+          <select id="txType" onchange="refreshCategoryOptions()">
+            <option value="income">ລາຍຮັບ</option>
+            <option value="expense">ລາຍຈ່າຍ</option>
+          </select>
+        </div>
+        <div>
+          <label>ໝວດໝູ່ຫຼັກ</label>
+          <select id="txCategory">
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>ວັນທີ</label>
+          <input type="date" id="txDate">
+        </div>
+        <div>
+          <label>ຈຳນວນເງິນ (ກີບ)</label>
+          <input type="number" id="txAmount" placeholder="0">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>ລາຍລະອຽດ</label>
+          <input type="text" id="txDesc" placeholder="ເຊັ່ນ: ຂາຍສະບູກິ່ນດອກໄມ້">
+        </div>
+      </div>
+      <button class="btn" onclick="addTransaction()">ບັນທຶກ</button>
+    </div>
+
+    <div class="card">
+      <h2>📋 ປະຫວັດລາຍການ</h2>
+      <div class="tableWrap">
+      <table>
+        <thead><tr><th>ວັນທີ</th><th>ປະເພດ</th><th>ໝວດໝູ່</th><th>ລາຍລະອຽດ</th><th>ຈຳນວນເງິນ</th><th></th></tr></thead>
+        <tbody id="txTableBody"></tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div id="tabSum" class="hidden">
+    <div class="card">
+      <div class="tabs2">
+        <button id="sumWeekBtn" class="active" onclick="switchSummary('week')">ປະຈຳອາທິດ</button>
+        <button id="sumMonthBtn" onclick="switchSummary('month')">ປະຈຳເດືອນ</button>
+        <button id="sumYearBtn" onclick="switchSummary('year')">ປະຈຳປີ</button>
+      </div>
+      <h2 id="sumTitle">ສະຫຼຸບປະຈຳອາທິດ</h2>
+      <div class="summaryGrid">
+        <div class="sumBox"><div class="label">ລາຍຮັບລວມ</div><div class="value" id="sumIncome" style="color:var(--green)">0 ກີບ</div></div>
+        <div class="sumBox"><div class="label">ລາຍຈ່າຍລວມ</div><div class="value" id="sumExpense" style="color:var(--red)">0 ກີບ</div></div>
+        <div class="sumBox"><div class="label">ກຳໄລ/ຂາດທຶນ</div><div class="value" id="sumNet">0 ກີບ</div></div>
+      </div>
+      <div id="sumByCategory" style="margin-top:16px;"></div>
+    </div>
+  </div>
+
+  <!-- INVENTORY -->
+  <div id="tabInv" class="hidden">
+    <div class="card">
+      <h2>📦 ເພີ່ມ/ແກ້ໄຂ ສິນຄ້າໃນສາງ</h2>
+      <div class="row">
+        <div>
+          <label>ປະເພດສິນຄ້າ</label>
+          <select id="invType">
+            <option value="ສະຄັບ">ສະຄັບ</option>
+            <option value="ສະບູ">ສະບູ</option>
+          </select>
+        </div>
+        <div>
+          <label>ຊື່ສິນຄ້າ</label>
+          <input type="text" id="invName" placeholder="ເຊັ່ນ: ສະບູມະນາວ">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>ຈຳນວນ (ຊິ້ນ)</label>
+          <input type="number" id="invQty" placeholder="0">
+        </div>
+        <div>
+          <label>ລາຄາ/ໜ່ວຍ (ກີບ)</label>
+          <input type="number" id="invPrice" placeholder="0">
+        </div>
+      </div>
+      <button class="btn" onclick="addInventory()">ບັນທຶກສິນຄ້າ</button>
+    </div>
+
+    <div class="card">
+      <h2>📦 ລາຍການສິນຄ້າໃນສາງ</h2>
+      <div class="tableWrap">
+      <table>
+        <thead><tr><th>ປະເພດ</th><th>ຊື່ສິນຄ້າ</th><th>ຈຳນວນ</th><th>ລາຄາ/ໜ່ວຍ</th><th>ມູນຄ່າລວມ</th><th></th></tr></thead>
+        <tbody id="invTableBody"></tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT -->
+  <div id="tabReport" class="hidden">
+    <div class="card">
+      <h2>🖨️ ສ້າງລາຍງານລາຍຮັບ-ລາຍຈ່າຍ (ຂະໜາດ A4)</h2>
+      <div class="row">
+        <div>
+          <label>ຈາກວັນທີ</label>
+          <input type="date" id="repFrom">
+        </div>
+        <div>
+          <label>ຫາວັນທີ</label>
+          <input type="date" id="repTo">
+        </div>
+      </div>
+      <button class="btn" onclick="buildReport()">ສ້າງລາຍງານ</button>
+      <button class="btn green" onclick="printReport()">🖨️ ພິມ / ບັນທຶກ PDF</button>
+      <p style="font-size:12px;color:var(--gray);">* ລາຍງານຈະຖືກສ້າງຂະໜາດ A4 ດ້ານລຸ່ມ, ກົດ "ພິມ" ເພື່ອພິມ ຫຼື ບັນທຶກເປັນ PDF</p>
+    </div>
+    <div class="card" id="reportPreviewCard" style="overflow-x:auto;">
+      <div id="reportPreview" style="transform-origin: top left;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN PRINT-ONLY AREA (filled when generating report) -->
+<div id="printArea"></div>
+
+<script type="module">
+/* ================================================================
+   ການຕັ້ງຄ່າ FIREBASE (Project: scrub-tracker) — ຖືກຕັ້ງຄ່າໄວ້ແລ້ວ
+   ================================================================ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import {
+  getFirestore, doc, getDoc, setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAh-7F6z57eluABWfZU_hlTMmh_lHVBFDg",
+  authDomain: "scrub-tracker.firebaseapp.com",
+  projectId: "scrub-tracker",
+  storageBucket: "scrub-tracker.firebasestorage.app",
+  messagingSenderId: "563596019744",
+  appId: "1:563596019744:web:1a2b676b02a12cd1955445",
+  measurementId: "G-XY4YB2FBTZ"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+// Analytics ໃຊ້ໄດ້ສະເພາະຕອນເປີດຜ່ານ http/https server ແທ້ (ບໍ່ແມ່ນເປີດໄຟລ໌ໂດຍກົງ), ຈິ່ງກວດສອບກ່ອນເອີ້ນໃຊ້
+try{ getAnalytics(fbApp); }catch(e){ console.warn('Analytics ບໍ່ພ້ອມໃຊ້ງານໃນສະພາບແວດລ້ອມນີ້:', e && e.message); }
+
+// ເຮັດໃຫ້ Key ທີ່ຈະໃຊ້ເປັນ Firestore document id ໄດ້ຢ່າງປອດໄພ (ບໍ່ໃຫ້ມີ '/')
+function safeDocId(key){
+  return String(key).replace(/\//g, '_');
+}
+
+let currentUser = null;
+let transactions = [];
+let inventory = [];
+
+const CATEGORIES = {
+  income: ['ຂາຍສະຄັບ','ຂາຍສະບູ','ຂາຍຊຸດຂອງຂວັນ','ລາຍຮັບອື່ນໆ'],
+  expense: ['ຄ່າວັດຖຸດິບ','ຄ່າຫຸ້ມຫໍ່/ບັນຈຸພັນ','ຄ່າຂົນສົ່ງ','ຄ່າຮ້ານ/ສະຖານທີ່','ຄ່າໂຄສະນາ','ລາຍຈ່າຍອື່ນໆ']
+};
+
+function refreshCategoryOptions(){
+  const type = document.getElementById('txType').value;
+  const sel = document.getElementById('txCategory');
+  sel.innerHTML = '';
+  for(const c of CATEGORIES[type]){
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  }
+}
+
+// ---------- STORAGE WRAPPER (ໃຊ້ Firebase Firestore ເປັນບ່ອນເກັບຂໍ້ມູນ) ----------
+// ໂຄງສ້າງ: collection "app_data", document id = key, field "value" = ຂໍ້ມູນ (string JSON)
+async function safeStorageGet(key, shared){
+  try{
+    const ref = doc(db, 'app_data', safeDocId(key));
+    const snap = await getDoc(ref);
+    if(snap.exists()){
+      const data = snap.data();
+      return { key, value: data.value, shared: !!shared };
+    }
+    return null;
+  }catch(e){
+    console.error('safeStorageGet error:', e);
+    return null;
+  }
+}
+
+async function safeStorageSet(key, value, shared){
+  try{
+    const ref = doc(db, 'app_data', safeDocId(key));
+    await setDoc(ref, { value, shared: !!shared, updatedAt: Date.now() });
+    return { key, value, shared: !!shared };
+  }catch(e){
+    console.error('safeStorageSet error:', e);
+    throw e;
+  }
+}
+
+// ---------- helpers ----------
+function fmt(n){ return Number(n||0).toLocaleString('en-US') + ' ກີບ'; }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function genId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+// ---------- AUTH ----------
+function showRegister(){
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+}
+function showLogin(){
+  document.getElementById('registerForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+}
+
+async function loadUsersMap(){
+  try{
+    const res = await safeStorageGet('users_map', true);
+    return res && res.value ? JSON.parse(res.value) : {};
+  }catch(e){
+    console.warn('loadUsersMap: ບໍ່ພົບ ຫຼື ຜິດພາດ', e);
+    return {};
+  }
+}
+async function saveUsersMap(map){
+  const result = await safeStorageSet('users_map', JSON.stringify(map), true);
+  if(!result) throw new Error('storage.set ສົ່ງຄືນຄ່າວ່າງ');
+}
+
+async function doRegister(){
+  const u = document.getElementById('regUser').value.trim();
+  const p = document.getElementById('regPass').value;
+  const p2 = document.getElementById('regPass2').value;
+  const msg = document.getElementById('regMsg');
+  msg.className='loginMsg';
+  if(!u || !p){ msg.textContent='ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ'; msg.classList.add('err'); return; }
+  if(p !== p2){ msg.textContent='ລະຫັດຜ່ານບໍ່ກົງກັນ'; msg.classList.add('err'); return; }
+  try{
+    const users = await loadUsersMap();
+    if(users[u]){ msg.textContent='ຊື່ຜູ້ໃຊ້ນີ້ມີແລ້ວ'; msg.classList.add('err'); return; }
+    users[u] = { password: p };
+    await saveUsersMap(users);
+    msg.textContent='ສ້າງບັນຊີສຳເລັດ! ກະລຸນາເຂົ້າສູ່ລະບົບ'; msg.classList.add('ok');
+    document.getElementById('regUser').value='';
+    document.getElementById('regPass').value='';
+    document.getElementById('regPass2').value='';
+    setTimeout(showLogin, 1000);
+  }catch(e){
+    console.error('doRegister error:', e);
+    msg.textContent='ເກີດຂໍ້ຜິດພາດ: ' + (e && e.message ? e.message : 'ບໍ່ສາມາດບັນທຶກໄດ້'); msg.classList.add('err');
+  }
+}
+
+async function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const msg = document.getElementById('loginMsg');
+  msg.className='loginMsg';
+  if(!u || !p){ msg.textContent='ກະລຸນາປ້ອນຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານ'; msg.classList.add('err'); return; }
+  try{
+    const users = await loadUsersMap();
+    const data = users[u];
+    if(!data){ msg.textContent='ບໍ່ພົບຊື່ຜູ້ໃຊ້ນີ້'; msg.classList.add('err'); return; }
+    if(data.password !== p){ msg.textContent='ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ'; msg.classList.add('err'); return; }
+    currentUser = u;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('currentUserLabel').textContent = '👤 ' + u;
+    await loadAllData();
+  }catch(e){
+    console.error('doLogin error:', e);
+    msg.textContent='ເກີດຂໍ້ຜິດພາດ: ' + (e && e.message ? e.message : 'ບໍ່ສາມາດເຂົ້າສູ່ລະບົບໄດ້'); msg.classList.add('err');
+  }
+}
+
+function doLogout(){
+  currentUser = null;
+  transactions = []; inventory = [];
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+}
+
+// ---------- DATA LOAD/SAVE ----------
+async function loadAllData(){
+  try{
+    const txRes = await safeStorageGet('transactions:'+currentUser, false);
+    transactions = txRes ? JSON.parse(txRes.value) : [];
+  }catch(e){ transactions = []; }
+  try{
+    const invRes = await safeStorageGet('inventory:'+currentUser, false);
+    inventory = invRes ? JSON.parse(invRes.value) : [];
+  }catch(e){ inventory = []; }
+  document.getElementById('txDate').value = todayStr();
+  refreshCategoryOptions();
+  renderTransactions();
+  renderInventory();
+  switchSummary('week');
+  const today = todayStr();
+  document.getElementById('repFrom').value = today;
+  document.getElementById('repTo').value = today;
+}
+
+async function saveTransactions(){
+  try{ await safeStorageSet('transactions:'+currentUser, JSON.stringify(transactions), false); }
+  catch(e){ alert('ບໍ່ສາມາດບັນທຶກຂໍ້ມູນໄດ້'); }
+}
+async function saveInventory(){
+  try{ await safeStorageSet('inventory:'+currentUser, JSON.stringify(inventory), false); }
+  catch(e){ alert('ບໍ່ສາມາດບັນທຶກຂໍ້ມູນໄດ້'); }
+}
+
+// ---------- NAV ----------
+function switchTab(tab){
+  document.getElementById('tabTx').classList.add('hidden');
+  document.getElementById('tabSum').classList.add('hidden');
+  document.getElementById('tabInv').classList.add('hidden');
+  document.getElementById('tabReport').classList.add('hidden');
+  document.getElementById('navTx').classList.remove('active');
+  document.getElementById('navSum').classList.remove('active');
+  document.getElementById('navInv').classList.remove('active');
+  document.getElementById('navReport').classList.remove('active');
+  if(tab==='tx'){ document.getElementById('tabTx').classList.remove('hidden'); document.getElementById('navTx').classList.add('active'); }
+  if(tab==='sum'){ document.getElementById('tabSum').classList.remove('hidden'); document.getElementById('navSum').classList.add('active'); switchSummary(currentSummaryRange); }
+  if(tab==='inv'){ document.getElementById('tabInv').classList.remove('hidden'); document.getElementById('navInv').classList.add('active'); }
+  if(tab==='report'){ document.getElementById('tabReport').classList.remove('hidden'); document.getElementById('navReport').classList.add('active'); }
+}
+
+// ---------- TRANSACTIONS ----------
+async function addTransaction(){
+  const type = document.getElementById('txType').value;
+  const category = document.getElementById('txCategory').value;
+  const date = document.getElementById('txDate').value || todayStr();
+  const desc = document.getElementById('txDesc').value.trim();
+  const amount = parseFloat(document.getElementById('txAmount').value);
+  if(!desc || !amount || amount<=0){ alert('ກະລຸນາປ້ອນລາຍລະອຽດ ແລະ ຈຳນວນເງິນໃຫ້ຖືກຕ້ອງ'); return; }
+  transactions.push({ id: genId(), type, category, date, desc, amount });
+  await saveTransactions();
+  document.getElementById('txDesc').value='';
+  document.getElementById('txAmount').value='';
+  renderTransactions();
+  switchSummary(currentSummaryRange);
+}
+
+async function deleteTransaction(id){
+  transactions = transactions.filter(t=>t.id!==id);
+  await saveTransactions();
+  renderTransactions();
+  switchSummary(currentSummaryRange);
+}
+
+function renderTransactions(){
+  const body = document.getElementById('txTableBody');
+  body.innerHTML='';
+  const sorted = [...transactions].sort((a,b)=> b.date.localeCompare(a.date));
+  for(const t of sorted){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${t.date}</td>
+      <td>${t.type==='income'?'ລາຍຮັບ':'ລາຍຈ່າຍ'}</td>
+      <td><span class="catTag">${t.category||'-'}</span></td>
+      <td>${t.desc}</td>
+      <td class="${t.type}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</td>
+      <td><button class="delBtn" onclick="deleteTransaction('${t.id}')">ລຶບ</button></td>
+    `;
+    body.appendChild(tr);
+  }
+  if(sorted.length===0){
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;">ຍັງບໍ່ມີລາຍການ</td></tr>';
+  }
+}
+
+// ---------- SUMMARY ----------
+let currentSummaryRange = 'week';
+function switchSummary(range){
+  currentSummaryRange = range;
+  document.getElementById('sumWeekBtn').classList.toggle('active', range==='week');
+  document.getElementById('sumMonthBtn').classList.toggle('active', range==='month');
+  document.getElementById('sumYearBtn').classList.toggle('active', range==='year');
+  const titles = {week:'ສະຫຼຸບປະຈຳອາທິດ', month:'ສະຫຼຸບປະຈຳເດືອນ', year:'ສະຫຼຸບປະຈຳປີ'};
+  document.getElementById('sumTitle').textContent = titles[range];
+
+  const now = new Date();
+  let filtered = transactions.filter(t=>{
+    const d = new Date(t.date);
+    if(range==='week'){
+      const diffDays = (now - d) / (1000*60*60*24);
+      return diffDays >= 0 && diffDays < 7;
+    }
+    if(range==='month'){
+      return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+    }
+    if(range==='year'){
+      return d.getFullYear()===now.getFullYear();
+    }
+    return false;
+  });
+
+  const income = filtered.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const expense = filtered.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const net = income - expense;
+
+  document.getElementById('sumIncome').textContent = fmt(income);
+  document.getElementById('sumExpense').textContent = fmt(expense);
+  const netEl = document.getElementById('sumNet');
+  netEl.textContent = (net>=0?'+':'') + fmt(net);
+  netEl.style.color = net>=0 ? 'var(--green)' : 'var(--red)';
+
+  // breakdown by category
+  const byCat = {};
+  for(const t of filtered){
+    const key = (t.type==='income'?'ລາຍຮັບ: ':'ລາຍຈ່າຍ: ') + (t.category||'-');
+    byCat[key] = (byCat[key]||0) + t.amount;
+  }
+  const catDiv = document.getElementById('sumByCategory');
+  const keys = Object.keys(byCat);
+  if(keys.length===0){
+    catDiv.innerHTML = '';
+  } else {
+    let html = '<h2 style="font-size:14px;">📊 ສະຫຼຸບຕາມໝວດໝູ່</h2><div class="tableWrap"><table><thead><tr><th>ໝວດໝູ່</th><th>ຈຳນວນເງິນ</th></tr></thead><tbody>';
+    for(const k of keys.sort()){
+      html += `<tr><td>${k}</td><td>${fmt(byCat[k])}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+    catDiv.innerHTML = html;
+  }
+}
+
+// ---------- INVENTORY ----------
+async function addInventory(){
+  const type = document.getElementById('invType').value;
+  const name = document.getElementById('invName').value.trim();
+  const qty = parseInt(document.getElementById('invQty').value);
+  const price = parseFloat(document.getElementById('invPrice').value);
+  if(!name || isNaN(qty) || qty<0 || isNaN(price) || price<0){
+    alert('ກະລຸນາປ້ອນຂໍ້ມູນສິນຄ້າໃຫ້ຖືກຕ້ອງ'); return;
+  }
+  const existing = inventory.find(i=>i.name===name && i.type===type);
+  if(existing){
+    existing.qty = qty;
+    existing.price = price;
+  } else {
+    inventory.push({ id: genId(), type, name, qty, price });
+  }
+  await saveInventory();
+  document.getElementById('invName').value='';
+  document.getElementById('invQty').value='';
+  document.getElementById('invPrice').value='';
+  renderInventory();
+}
+
+async function deleteInventory(id){
+  inventory = inventory.filter(i=>i.id!==id);
+  await saveInventory();
+  renderInventory();
+}
+
+function renderInventory(){
+  const body = document.getElementById('invTableBody');
+  body.innerHTML='';
+  for(const i of inventory){
+    const total = i.qty * i.price;
+    const lowStock = i.qty <= 5;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i.type}</td>
+      <td>${i.name}</td>
+      <td class="${lowStock?'lowStock':''}">${i.qty}${lowStock?' ⚠️':''}</td>
+      <td>${fmt(i.price)}</td>
+      <td>${fmt(total)}</td>
+      <td><button class="delBtn" onclick="deleteInventory('${i.id}')">ລຶບ</button></td>
+    `;
+    body.appendChild(tr);
+  }
+  if(inventory.length===0){
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;">ຍັງບໍ່ມີສິນຄ້າໃນສາງ</td></tr>';
+  }
+}
+
+// ---------- REPORT (A4) ----------
+function buildReport(){
+  const from = document.getElementById('repFrom').value;
+  const to = document.getElementById('repTo').value;
+  if(!from || !to){ alert('ກະລຸນາເລືອກຊ່ວງວັນທີ'); return; }
+
+  const filtered = transactions.filter(t => t.date >= from && t.date <= to)
+                                .sort((a,b)=> a.date.localeCompare(b.date));
+
+  const income = filtered.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const expense = filtered.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const net = income - expense;
+
+  let rows = '';
+  for(const t of filtered){
+    rows += `<tr>
+      <td>${t.date}</td>
+      <td>${t.type==='income'?'ລາຍຮັບ':'ລາຍຈ່າຍ'}</td>
+      <td>${t.category||'-'}</td>
+      <td>${t.desc}</td>
+      <td style="text-align:right;">${t.type==='income'?fmt(t.amount):'-'}</td>
+      <td style="text-align:right;">${t.type==='expense'?fmt(t.amount):'-'}</td>
+    </tr>`;
+  }
+  if(filtered.length===0){
+    rows = '<tr><td colspan="6" style="text-align:center;color:#999;">ບໍ່ມີລາຍການໃນຊ່ວງວັນທີນີ້</td></tr>';
+  }
+
+  // category breakdown
+  const byCat = {};
+  for(const t of filtered){
+    const key = (t.type==='income'?'ລາຍຮັບ':'ລາຍຈ່າຍ') + ' - ' + (t.category||'-');
+    byCat[key] = (byCat[key]||0) + t.amount;
+  }
+  let catRows = '';
+  for(const k of Object.keys(byCat).sort()){
+    catRows += `<tr><td>${k}</td><td style="text-align:right;">${fmt(byCat[k])}</td></tr>`;
+  }
+  if(!catRows){ catRows = '<tr><td colspan="2" style="text-align:center;color:#999;">-</td></tr>'; }
+
+  const printedAt = new Date().toLocaleString('lo-LA');
+
+  const html = `
+    <div class="reportPage">
+      <div class="reportHead">
+        <h1>🧼 ລາຍງານລາຍຮັບ - ລາຍຈ່າຍ</h1>
+        <p>ສະຄັບ & ສະບູ — ໂປຣແກຣມຕິດຕາມສິນຄ້າ ແລະ ບັນຊີ</p>
+      </div>
+      <div class="reportMeta">
+        <div>ຜູ້ໃຊ້: <b>${currentUser||''}</b></div>
+        <div>ຊ່ວງວັນທີ: <b>${from}</b> ຫາ <b>${to}</b></div>
+      </div>
+      <table class="reportTable">
+        <thead><tr><th>ວັນທີ</th><th>ປະເພດ</th><th>ໝວດໝູ່</th><th>ລາຍລະອຽດ</th><th>ລາຍຮັບ</th><th>ລາຍຈ່າຍ</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="reportSumGrid">
+        <div class="box"><div class="l">ລາຍຮັບລວມ</div><div class="v" style="color:var(--green)">${fmt(income)}</div></div>
+        <div class="box"><div class="l">ລາຍຈ່າຍລວມ</div><div class="v" style="color:var(--red)">${fmt(expense)}</div></div>
+        <div class="box"><div class="l">ກຳໄລ/ຂາດທຶນ</div><div class="v" style="color:${net>=0?'var(--green)':'var(--red)'}">${(net>=0?'+':'')+fmt(net)}</div></div>
+      </div>
+      <div class="reportCatTitle">ສະຫຼຸບຕາມໝວດໝູ່ຫຼັກ</div>
+      <table class="reportTable">
+        <thead><tr><th>ໝວດໝູ່</th><th style="text-align:right;">ຈຳນວນເງິນ</th></tr></thead>
+        <tbody>${catRows}</tbody>
+      </table>
+      <div class="reportFooter">ພິມລາຍງານວັນທີ: ${printedAt}</div>
+    </div>
+  `;
+
+  document.getElementById('reportPreview').innerHTML = html;
+  document.getElementById('printArea').innerHTML = html;
+}
+
+function printReport(){
+  if(!document.getElementById('printArea').innerHTML.trim()){
+    buildReport();
+  }
+  window.print();
+}
+
+// ---------- ເປີດເຜີຍຟັງຊັນໃຫ້ window (ຈຳເປັນເພາະ script ນີ້ເປັນ type="module") ----------
+window.showRegister = showRegister;
+window.showLogin = showLogin;
+window.doRegister = doRegister;
+window.doLogin = doLogin;
+window.doLogout = doLogout;
+window.switchTab = switchTab;
+window.refreshCategoryOptions = refreshCategoryOptions;
+window.addTransaction = addTransaction;
+window.deleteTransaction = deleteTransaction;
+window.switchSummary = switchSummary;
+window.addInventory = addInventory;
+window.deleteInventory = deleteInventory;
+window.buildReport = buildReport;
+window.printReport = printReport;
+</script>
+</body>
+</html>
