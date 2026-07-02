@@ -1239,5 +1239,25 @@ function importData(e){
   reader.readAsText(file); e.target.value='';
 }
 </script>
+  <script type="module">
+    // ນຳເຂົ້າ Firebase ຜ່ານ CDN ຂອງ Google
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+    // ຂໍ້ມູນ Config ໂປຣເຈັກ scrub-tracker ຂອງທ່ານ
+    const firebaseConfig = {
+      apiKey: "AIzaSyAh-7F6z57eIuABWFZU_hLTMmn_lHVBfDg",
+      authDomain: "scrub-tracker.firebaseapp.com",
+      projectId: "scrub-tracker",
+      storageBucket: "scrub-tracker.firebasestorage.app",
+      messagingSenderId: "563596019744",
+      appId: "1:563596019744:web:1a2b676b02a12cd1955445",
+      measurementId: "G-XY4YB2FBTZ"
+    };
+
+    // ສັ່ງໃຫ້ Firebase ເລີ່ມເຮັດວຽກ
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </body>
 </html>
