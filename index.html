@@ -561,7 +561,6 @@ function initFirebase(cfg){
     if(firebase.apps.length>0) firebase.app().delete().catch(()=>{});
     firebase.initializeApp(cfg);
     db=firebase.firestore();
-    db.settings({experimentalForceLongPolling:true,merge:true});
     fbEnabled=true;
     setSyncUI('ok','Cloud ເຊື່ອມຕໍ່ແລ້ວ');
     return true;
