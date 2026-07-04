@@ -750,6 +750,9 @@ async function initAuthScreen(){
     showSyncBanner('info', 'ℹ️ ຍັງບໍ່ໄດ້ຕັ້ງຄ່າ Firebase — ຂໍ້ມູນຈະບັນທຶກຢູ່ໃນອຸປະກອນນີ້ເທົ່ານັ້ນ (ບໍ່ຊິ້ງຂ້າມອຸປະກອນ)');
   }
   const existing = await getAuth();
+  if(storageMode === 'firebase'){
+    showSyncBanner('ok', '✅ ເຊື່ອມຕໍ່ Firebase ສຳເລັດ — ຂໍ້ມູນຈະຊິ້ງຂ້າມທຸກອຸປະກອນ');
+  }
   authMode = existing ? 'login' : 'signup';
   renderAuthMode();
 }
